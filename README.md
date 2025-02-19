@@ -34,3 +34,17 @@ ts-node index.ts
 yarn add -D ts-node-dev
 ```
 
+## Importing 
+
+- Why Import?
+  - Organizes code by splitting it across multiple files
+  - Enables code reuse and modularity
+- Basic Syntax:
+  - `import { exportedMember } from './fileName';`
+- Importing Default Exports:
+  - `import defaultExport from './fileName';`
+- Importing Everything:
+  - `import * as utils from './utils';`
+- Importing an installed package: 
+  - `import lodash from 'lodash;'
+- ECMAScript Modules / (ESM) import statements are preferred

@@ -40,16 +40,34 @@
 // }
 
 
+//union types 
+type DuckColor = "White" | "Brown" | "Black" | "Mixed"; 
+const myColor: DuckColor = "White";
+
+// Enum similar to union type 
+// collection of values with friendly names
+enum DuckType {
+    Mallard = 'Mallard',
+    Muscovy= 'Muscovy',
+    Pekin = 'Pekin'
+};
+
+// using the enum 
+// const duckType = DuckType.Mallard;
+
+// if we don't specify the value it will print 0 
+// console.log(duckType);
+
 class PondDuck { 
     name: string;
     age: number;
-    type: string;
-    color: string;
+    type: DuckType;
+    color: DuckColor;
     isFlying: boolean;
     favoriteFood?: string;
 
 
-    constructor(name: string, age: number, type: string, color: string, isFlying: boolean, favoriteFood?: string){
+    constructor(name: string, age: number, type: DuckType, color: DuckColor, isFlying: boolean, favoriteFood?: string){
         this.name = name; 
         this.age = age;
         this.type = type;
@@ -95,21 +113,47 @@ class PondDuck {
 }
 
 
-const daffy = new PondDuck("Daffy", 3, "Mallard", "Black", true, "corn");
+const duckPond: PondDuck[] = [];
 
-daffy.quack(3);
+const daffy = new PondDuck("Daffy", 3, DuckType.Mallard, "Black", true, "corn");
+const donald = new PondDuck("Donald", 4, DuckType.Pekin, "White", false);
 
-daffy.fly();
-
-daffy.land();
-
-daffy.land();
-
-daffy.fly();
-
-
-const donald = new PondDuck("Donald", 4, "Pekin", "White", false);
+const howard = new PondDuck("Howard", 2, DuckType.Muscovy, "Brown", false);
 
 donald.fly();
 
 donald.land();
+
+duckPond.push(daffy,donald,howard);
+
+
+function makeAllDucksQuack(ducks: PondDuck[], times = 1): void {
+    // for each method exists on all arrays 
+    // ducks param we name duck by our own 
+    ducks.forEach(duck => duck.quack(times));
+}
+
+// param duck of type PondDuck 
+function makeAllDucksFly(ducks: PondDuck[]): void{
+    ducks.forEach(duck => duck.fly());
+}
+
+
+// ToDo
+// Write function to make a specific duck in pond fly based on its name
+// Warn if the duck is not found, Sample Output: No duck named Donald found in the pond.
+function findDuckAndFly(name: string): void {
+    const foundDuck = duckPond.find(duck => duck.name === name)
+    if (foundDuck){
+        foundDuck.fly();
+    }
+    else {
+        console.log(`No duck named ${name} found in the pond.`)
+    }
+}
+
+makeAllDucksQuack(duckPond, 3);
+
+findDuckAndFly("Donald");
+
+
