@@ -67,7 +67,7 @@ cdktf --version
 cdktf init --template=typescript
 
 # Switch to yarn if you want to 
-rm packacge-lock.json 
+rm package-lock.json 
 
 # commands 
 corepack prepare yarn@stable --activate;
@@ -159,6 +159,13 @@ new TerraformOutput(this, 'readMeContent', {
 Similar to Terraform modules, but can be more dynamic that Terraform Modules. 
 
 ```
+interface ProjectFolderProps { 
+    readonly projectName: string;
+    readonly projectDirectory: string; 
+}
+
+
+
 export class ProjectFolder extends Construct {
     constructor( scope: Construct, id: string, props: ProjectFolderProps) {
         super(scope,id);

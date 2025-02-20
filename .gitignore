@@ -1,3 +1,5 @@
+# MacOS 
+.DS_STORE
 
 # Local .terraform directories
 **/.terraform/*

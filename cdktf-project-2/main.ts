@@ -1,7 +1,8 @@
 import { Construct } from "constructs";
 import { App, TerraformOutput, TerraformStack } from "cdktf";
-import { provider, file } from '@cdktf/provider-local';
+import { provider } from '@cdktf/provider-local';
 import * as path from 'path';
+import { ProjectFolder } from "./constructs/ProjFolder";
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -16,24 +17,16 @@ class MyStack extends TerraformStack {
     // Make project folder 
     const projectDirectory = path.join(process.env.INIT_CWD!, './authors-projects');
     const projectName = 'project-1';
-    const basePath = `${projectDirectory}/${projectName}`;
 
-    // Add a README file 
-    // Logical id in this case is readme-file
-    const readMeFile = new file.File(this, 'readme-file-1', {
-      filename: `${basePath}/README.md`,
-      content: `# ${projectName} \n\nThis is the ${projectName} project`,
-      // lifecycle: { ignoreChanges: ['content']}, 
+    const projectFolder = new ProjectFolder(this, 'project-folder', {
+      projectName,
+      projectDirectory,
     });
 
-    // Add package.json file 
-    new file.File(this, 'package-json-file', {
-      filename: `${basePath}/package.json`,
-      content: `# content here`
-    });
+    // projectFolder.readMeFile
 
-    new TerraformOutput(this, 'readMeContents', {
-      value: readMeFile.content,
+    new TerraformOutput(this, 'readMeContent', {
+      value: projectFolder.readMeFile.content,
     });
 
   }
