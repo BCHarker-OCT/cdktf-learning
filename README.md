@@ -140,3 +140,32 @@ from the help docs:
   Destroy:
     cdktf destroy [stack] Destroy the stack
 ```
+
+## Adding providers 
+
+Adding local provider using yarn: `yarn add @cdktf/provider-local`
+
+## Output 
+
+```typescript
+// Output the readMefile content 
+new TerraformOutput(this, 'readMeContent', {
+    value: readMeFile.content,
+});
+```
+
+## CDK Constructs 
+
+Similar to Terraform modules, but can be more dynamic that Terraform Modules. 
+
+```
+export class ProjectFolder extends Construct {
+    constructor( scope: Construct, id: string, props: ProjectFolderProps) {
+        super(scope,id);
+
+        const { projectName, projectDirectory } = props; 
+
+        // resusable code 
+    }
+}
+```
