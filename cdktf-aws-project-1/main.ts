@@ -5,6 +5,7 @@ import { iamRole, provider } from "@cdktf/provider-aws";
 // lambda-function";
 import { LambdaFunction } from "./constructs/LambdaFunction";
 import * as path from 'path';
+import { getConstructName } from "./utils/utils";
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -32,10 +33,16 @@ class MyStack extends TerraformStack {
 
 
     new LambdaFunction(this, 'lambda-function-1', {
-      functionName: 'cdktf-name-picker-api',
-      filename: path.join(process.env.INIT_CWD!, './function-name-picker/index.js.zip'),
+      // functionName: 'cdktf-name-picker-api',
+      functionName: getConstructName(scope, 'api'),
+      // filename: path.join(process.env.INIT_CWD!, './out/index.js.zip'),
+      // file and function 
+      bundle: './function-name-picker',
       handler: 'index.handler'
     });
+
+
+    
 
   }
 }

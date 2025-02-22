@@ -176,3 +176,7 @@ export class ProjectFolder extends Construct {
     }
 }
 ```
+
+## Code Awareness 
+
+We can use Terraform asset for our Terraform to be more aware of code changes and trigger automated changes to deployments. 
