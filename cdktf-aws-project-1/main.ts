@@ -1,11 +1,9 @@
 import { Construct } from "constructs";
 import { App, TerraformOutput, TerraformStack } from "cdktf";
-import { iamRole, provider } from "@cdktf/provider-aws";
-// import { LambdaFunction } from "@cdktf/provider-aws/lib/
-// lambda-function";
+import { provider } from "@cdktf/provider-aws";
 import { LambdaFunction } from "./constructs/LambdaFunction";
-import * as path from 'path';
 import { getConstructName } from "./utils/utils";
+import { LambdaRestApi } from "./constructs/LambdaRestApi";
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -13,37 +11,27 @@ class MyStack extends TerraformStack {
 
     new provider.AwsProvider(this, 'aws-provider', {
       region: 'us-west-2',
-    })
-
-    // const lambdaRole = new iamRole.IamRole(this, 'lambda-execution-role', {
-    //   name: `cdktf-name-picker-api-execution-role`,
-    //   assumeRolePolicy: JSON.stringify({
-    //     Version: '2012-10-17',
-    //     Statement: [
-    //       {
-    //         Effect: 'Allow',
-    //         Principal: {
-    //           Service: 'lambda.amazonaws.com',
-    //         },
-    //         Action: 'sts:AssumeRole',
-    //       }
-    //     ],
-    //   }),
-    // });
-
-
-    new LambdaFunction(this, 'lambda-function-1', {
-      // functionName: 'cdktf-name-picker-api',
-      functionName: getConstructName(scope, 'api'),
-      // filename: path.join(process.env.INIT_CWD!, './out/index.js.zip'),
-      // file and function 
-      bundle: './function-name-picker',
-      handler: 'index.handler'
     });
 
+    // Create Lambda function using our custom construct
+    new LambdaFunction(this, 'lambda-function-1', {
+      functionName: getConstructName(this, 'api'),
+      bundle: './function-name-picker',
+      handler: 'index.handler',
+    });
 
-    
+    // Create a second Lambda function
+    const functionNamePicker = new LambdaFunction(this, 'lambda-function', {
+      functionName: getConstructName(this, 'api'),
+      bundle: './function-name-picker', // fixed typo
+      handler: 'index.handler',
+    });
 
+    // Create API Gateway REST API that invokes the Lambda
+    new LambdaRestApi(this, 'lambda-rest-api', {
+      handler: functionNamePicker.lambdaFunction, // ensure this property exists in your construct
+      stageName: 'dev',
+    });
   }
 }
 
